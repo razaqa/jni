@@ -117,7 +117,25 @@ class CustomerController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $errorValidate = $this->validateIDRequest($id);
+        if ($errorValidate != '') {
+            return response()->json([
+                'errors' => $errorValidate,
+            ], 422);
+        }
+
+        $customer = Customer::find($id);
+        if (is_null($customer)) {
+            return response()->json([
+                'errors' => 'data not found',
+            ], 404);
+        }
+
+        $customer->delete();
+        return response()->json([
+            'message' => 'data deleted successfully',
+            'data' => $customer,
+        ]);
     }
 
     /**

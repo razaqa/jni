@@ -24,4 +24,5 @@ Route::controller(CustomerController::class)->group(function () {
     Route::post('/customers', 'store')->name('customer.create');
     Route::get('/customers/{id}', 'show')->name('customer.read');
     Route::put('/customers/{id}', 'update')->name('customer.update');
+    Route::delete('/customers/{id}', 'destroy')->name('customer.delete');
 });
