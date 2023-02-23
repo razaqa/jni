@@ -74,7 +74,42 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, string $id)
     {
-        //
+        $errorValidate = $this->validateIDRequest($id);
+        if ($errorValidate != '') {
+            return response()->json([
+                'errors' => $errorValidate,
+            ], 422);
+        }
+
+        $customer = Customer::find($id);
+        if (is_null($customer)) {
+            return response()->json([
+                'errors' => 'data not found',
+            ], 404);
+        }
+
+        if ($request->has('nama_customer')) {
+            $customer->nama_customer = $request->input('nama_customer');
+        }
+        if ($request->has('telp_customer')) {
+            $customer->telp_customer = $request->input('telp_customer');
+        }
+        if ($request->has('alamat_customer')) {
+            $customer->alamat_customer = $request->input('alamat_customer');
+        }
+        $isSuccessSave = $customer->save();
+
+        if (!$isSuccessSave) {
+            return response()->json([
+                'errors' => 'error when update',
+                'request' => $request->input(),
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'data updated successfully',
+            'data' => $customer,
+        ]);
     }
 
     /**
