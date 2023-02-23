@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use Illuminate\Database\QueryException;
 
 class CustomerController extends Controller
 {
@@ -22,7 +23,28 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        try {
+            $customer = Customer::create([
+                'id_customer' => $request->input('id_customer'),
+                'nama_customer' => $request->input('nama_customer'),
+                'telp_customer' => $request->input('telp_customer'),
+                'alamat_customer' => $request->input('alamat_customer'),
+            ]);
+        } catch (QueryException $exception) {
+            $errorCreate = $exception->errorInfo;
+        }
+        
+        if (isset($errorCreate)) {
+            return response()->json([
+                'errors' => $errorCreate,
+                'request' => $request->input(),
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'data saved successfully',
+            'data' => $customer,
+        ], 201);
     }
 
     /**

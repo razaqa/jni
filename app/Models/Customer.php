@@ -36,4 +36,11 @@ class Customer extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['id_customer', 'nama_customer', 'telp_customer', 'alamat_customer'];
 }
