@@ -22,4 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(CustomerController::class)->group(function () {
     Route::get('/customers', 'index')->name('customer.read.all');
     Route::post('/customers', 'store')->name('customer.create');
+    Route::get('/customers/{id}', 'show')->name('customer.read');
 });

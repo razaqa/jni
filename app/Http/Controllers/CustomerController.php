@@ -52,7 +52,21 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $errorValidate = $this->validateIDRequest($id);
+        if ($errorValidate != '') {
+            return response()->json([
+                'errors' => $errorValidate,
+            ], 422);
+        }
+        
+        $customer = Customer::find($id);
+        if (is_null($customer)) {
+            return response()->json([
+                'errors' => 'data not found',
+            ], 404);
+        }
+
+        return response()->json($customer);
     }
 
     /**
@@ -69,5 +83,16 @@ class CustomerController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Validate ID Input in URL Path.
+     */
+    protected function validateIDRequest(string $id) {
+        define('ID_CUSTOMER_DB_LENGTH', 5);
+        if (strlen($id) != ID_CUSTOMER_DB_LENGTH) {
+            return 'The id customer field must be 5 characters.';
+        }
+        return '';
     }
 }
