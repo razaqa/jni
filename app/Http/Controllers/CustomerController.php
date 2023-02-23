@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
-use Illuminate\Database\QueryException;
+use Exception;
 
 class CustomerController extends Controller
 {
@@ -30,8 +30,8 @@ class CustomerController extends Controller
                 'telp_customer' => $request->input('telp_customer'),
                 'alamat_customer' => $request->input('alamat_customer'),
             ]);
-        } catch (QueryException $exception) {
-            $errorCreate = $exception->errorInfo;
+        } catch (Exception $exception) {
+            $errorCreate = $exception;
         }
         
         if (isset($errorCreate)) {
